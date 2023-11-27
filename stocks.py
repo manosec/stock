@@ -67,6 +67,19 @@ def create_stock_chart(symbol, days_to_show=50):
 
 
 if __name__ == "__main__":
+    # Store the initial value of widgets in session state
+    if "visibility" not in st.session_state:
+        st.session_state.visibility = "visible"
+        st.session_state.disabled = False
+    text_input = st.text_input(
+        "Enter Stock Ticker 👇",
+        label_visibility=st.session_state.visibility,
+        disabled=st.session_state.disabled,
+        placeholder="Enter stock ticker here(Eg: NVDA)"
+    )
     tickers =  ['AAPL', 'TSLA','MSFT','NFLX', 'NVDA']
-    symbol = st.selectbox("Select a stock ", tickers)
-    create_stock_chart(symbol=symbol, days_to_show=50)
+    if text_input:
+        st.write("You entered: ", text_input)
+        create_stock_chart(symbol=text_input.upper(), days_to_show=50)
+    create_stock_chart(symbol="AAPL", days_to_show=50)
+    
