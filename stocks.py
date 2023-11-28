@@ -6,7 +6,6 @@ import datetime as dt
 import altair as alt
 import pandas_datareader as pdr
 import requests
-from bs4 import BeautifulSoup
 from get_all_tickers import get_tickers as gt
 
 
@@ -42,7 +41,7 @@ def create_stock_chart(symbol, days_to_show=50):
     stock_data['200_MA'] = stock_data['Close'].rolling(window=200).mean().round(2)
     
     # Plot 100-day and 200-day moving averages with tooltips
-    ma_chart = alt.Chart(stock_data.tail(days_to_show).reset_index(), title="100 & 200 Moving Average by Days").mark_line().encode(
+    ma_chart = alt.Chart(stock_data.tail(days_to_show).reset_index(), title="100 & 200 days Moving Average").mark_line().encode(
         x=alt.X('Date:T', axis=alt.Axis(title="Days")),
         y=alt.Y('100_MA:Q', title='Price in Dollar'),
         color=alt.value('green'),
@@ -68,18 +67,12 @@ def create_stock_chart(symbol, days_to_show=50):
 
 if __name__ == "__main__":
     # Store the initial value of widgets in session state
-    if "visibility" not in st.session_state:
-        st.session_state.visibility = "visible"
-        st.session_state.disabled = False
     text_input = st.text_input(
         "Enter Stock Ticker 👇",
-        label_visibility=st.session_state.visibility,
-        disabled=st.session_state.disabled,
         placeholder="Enter stock ticker here(Eg: NVDA)"
     )
-    tickers =  ['AAPL', 'TSLA','MSFT','NFLX', 'NVDA']
+    
     if text_input:
-        st.write("You entered: ", text_input)
         create_stock_chart(symbol=text_input.upper(), days_to_show=50)
     create_stock_chart(symbol="AAPL", days_to_show=50)
     
