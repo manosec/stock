@@ -74,5 +74,6 @@ if __name__ == "__main__":
     
     if text_input:
         create_stock_chart(symbol=text_input.upper(), days_to_show=50)
-    create_stock_chart(symbol="AAPL", days_to_show=50)
+    else:
+        create_stock_chart(symbol="AAPL", days_to_show=50)
     
