@@ -25,8 +25,8 @@ def load_lstm_model(model_path='lstm_stock_price_prediction.keras'):
 def load_scaler(scaler_path='scaler.joblib'):
     return joblib.load(scaler_path)
 
-def plot_existing_and_forecast_trend(stock_data, days_to_show, lstm_model=load_lstm_model(), scaler=load_scaler(), forecast_days=30):
-    st.subheader(f'Existing Trend and {forecast_days}-Day Forecast')
+def plot_existing_and_forecast_trend(stock_data, days_to_show, ticker, lstm_model=load_lstm_model(), scaler=load_scaler(), forecast_days=15):
+    st.subheader(f'Existing Trend and {forecast_days}-Day Price Forecast for {ticker}')
 
     # Scale the closing price data
     scaled_data = scaler.transform(stock_data['Close'].values.reshape(-1, 1))
@@ -64,7 +64,8 @@ def plot_existing_and_forecast_trend(stock_data, days_to_show, lstm_model=load_l
         x=alt.X('Date:T', axis=alt.Axis(title="Date")),
         y=alt.Y('Close:Q', title='Price in Dollar'),
         tooltip=['Date:T', alt.Tooltip('Close:Q', title="Existing Closing Price")],
-        color=alt.value('blue')
+        color=alt.value('blue'),
+        strokeWidth=alt.value(8)
     ).properties(
         width=800,
         height=400
@@ -75,7 +76,8 @@ def plot_existing_and_forecast_trend(stock_data, days_to_show, lstm_model=load_l
         x=alt.X('Date:T', axis=alt.Axis(title="Date")),
         y=alt.Y('Forecasted Close:Q', title='Price in Dollar'),
         tooltip=['Date:T', alt.Tooltip('Forecasted Close:Q', title="Forecasted Closing Price")],
-        color=alt.value('orange')
+        color=alt.value('orange'),
+        strokeWidth=alt.value(8)
     )
     
     # Combine both charts
@@ -141,7 +143,7 @@ def create_stock_chart(symbol, days_to_show):
         
         st.altair_chart(ma_chart, use_container_width=True)
         create_daily_return_scatter(symbol, stock_data, days_to_show)
-        plot_existing_and_forecast_trend(stock_data=stock_data, days_to_show=days_to_show)
+        plot_existing_and_forecast_trend(stock_data=stock_data, days_to_show=days_to_show, ticker=symbol)
 
     except Exception as e:
         print(e)
