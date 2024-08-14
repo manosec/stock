@@ -25,7 +25,7 @@ def load_lstm_model(model_path='lstm_stock_price_prediction.keras'):
 def load_scaler(scaler_path='scaler.joblib'):
     return joblib.load(scaler_path)
 
-def plot_existing_and_forecast_trend(stock_data, days_to_show, lstm_model=load_lstm_model(), scaler=load_scaler(), forecast_days=80):
+def plot_existing_and_forecast_trend(stock_data, days_to_show, lstm_model=load_lstm_model(), scaler=load_scaler(), forecast_days=30):
     st.subheader(f'Existing Trend and {forecast_days}-Day Forecast')
 
     # Scale the closing price data
