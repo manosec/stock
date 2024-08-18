@@ -18,7 +18,7 @@ def get_stock_data(symbol, start_date, end_date):
     return stock_data
 
 @st.cache_resource()
-def load_lstm_model(model_path='lstm_stock_price_prediction.keras'):
+def load_lstm_model(model_path='model.joblib'):
     return load_model(model_path)
 
 @st.cache_resource()
