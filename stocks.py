@@ -14,12 +14,15 @@ import numpy as np
 
 @st.cache_resource()
 def get_stock_data(symbol, start_date, end_date):
-    stock_data = yf.download(symbol, start=start_date, end=end_date)
-    return stock_data
+    try:
+        stock_data = yf.download(symbol, start=start_date, end=end_date)
+        return stock_data
+    except Exception as  e:
+        return e
 
 @st.cache_resource()
 def load_lstm_model(model_path='model.joblib'):
-    return load_model(model_path)
+    return joblib.load(model_path)
 
 @st.cache_resource()
 def load_scaler(scaler_path='scaler.joblib'):
@@ -113,7 +116,7 @@ def create_stock_chart(symbol, days_to_show):
         # Calculate 100-day and 200-day moving averages
         stock_data['100_MA'] = stock_data['Close'].rolling(window=100).mean().round(2)
         stock_data['200_MA'] = stock_data['Close'].rolling(window=200).mean().round(2)
-                
+            
         ma_chart = alt.Chart(stock_data.tail(days_to_show).reset_index(), title="Closing Price by Days").mark_line().encode(
             x=alt.X('Date:T', axis=alt.Axis(title="Days")),
             y=alt.Y('Close:Q', title='Price in Dollar'),
